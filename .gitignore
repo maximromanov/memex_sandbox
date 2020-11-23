@@ -1,5 +1,5 @@
-_data/ # for everyone --- this is where our data will be
-.DS_Store # for those with Macs, to ignore the pesky .DS_Store files
+_data/
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
