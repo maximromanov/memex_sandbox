@@ -1,14 +1,4 @@
-import os, shutil, re
-import yaml
-
-###########################################################
-# VARIABLES ###############################################
-###########################################################
-
-settingsFile = "./settings.yml"
-settings = yaml.load(open(settingsFile))
-
-memexPath = settings["path_to_memex"]
+import os, re, shutil
 
 ###########################################################
 # FUNCTIONS ###############################################
@@ -18,6 +8,7 @@ memexPath = settings["path_to_memex"]
 def loadBib(bibTexFile):
 
     bibDic = {}
+    recordsNeedFixing = []
 
     with open(bibTexFile, "r", encoding="utf8") as f1:
         records = f1.read().split("\n@")
@@ -51,7 +42,7 @@ def loadBib(bibTexFile):
                             temp = val.split(";")
 
                             for t in temp:
-                                if t.endswith(".pdf"):
+                                if ".pdf" in t:
                                     val = t
 
                             bibDic[rCite][key] = val
@@ -61,8 +52,8 @@ def loadBib(bibTexFile):
     print("="*80)
     return(bibDic)
 
-# generate path from bibtex code, and create a folder, if does not exist;
-# if the code is `SavantMuslims2017`, the path will be pathToMemex+`/s/sa/SavantMuslims2017/`
+# generate path from bibtex citation key; for example, if the key is `SavantMuslims2017`,
+# the path will be pathToMemex+`/s/sa/SavantMuslims2017/`
 def generatePublPath(pathToMemex, bibTexCode):
     temp = bibTexCode.lower()
     directory = os.path.join(pathToMemex, temp[0], temp[:2], bibTexCode)
@@ -89,15 +80,3 @@ def processBibRecord(pathToMemex, bibRecDict):
             shutil.copyfile(pdfFileSRC, pdfFileDST)
 
 
-###########################################################
-# PROCESS ALL RECORDS #####################################
-###########################################################
-
-def processAllRecords(bibData):
-    for k,v in bibData.items():
-        processBibRecord(memexPath, v)
-
-bibData = loadBib(settings["bib_all"])
-processAllRecords(bibData)
-
-print("Done!")
