@@ -81,19 +81,19 @@ def ocrPublication(pathToMemex, citationKey, language):
 
     os.remove(pdfFileTemp)
 
-def identifyLanguage(bibRecDict):
+def identifyLanguage(bibRecDict, fallBackLanguage):
     if "langid" in bibRecDict:
         try:
             language = langKeys[bibRecDict["langid"]]
             message = "\t>> Language has been successfuly identified: %s" % language
         except:
             message = "\t>> Language ID `%s` cannot be understood by Tesseract; fix it and retry\n" % bibRecDict["langid"]
-            message += "\t>> For now, trying `eng`..."
-            language = "eng"
+            message += "\t>> For now, trying `%s`..." % fallBackLanguage
+            language = fallBackLanguage
     else:
         message = "\t>> No data on the language of the publication"
-        message += "\t>> For now, trying `eng`..."
-        language = "eng"
+        message += "\t>> For now, trying `%s`..." % fallBackLanguage
+        language = fallBackLanguage
     print(message)
     return(language)
 
@@ -115,7 +115,7 @@ def processAllRecords(bibData):
         functions.processBibRecord(memexPath, v)
 
         # 2. OCR the file
-        language = identifyLanguage(v)
+        language = identifyLanguage(v, "eng")
         ocrPublication(memexPath, v["rCite"], language)
 
 bibData = functions.loadBib(settings["bib_all"])
@@ -148,9 +148,11 @@ def processAllRecords(bibData):
         functions.processBibRecord(memexPath, bibRecord)
 
         # 2. OCR the file
-        language = identifyLanguage(bibRecord)
+        language = identifyLanguage(bibRecord, "eng")
         ocrPublication(memexPath, bibRecord["rCite"], language)
 
 
 bibData = functions.loadBib(settings["bib_all"])
 processAllRecords(bibData)
+
+# record to regenerate: RossabiReview2011
