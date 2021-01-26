@@ -69,4 +69,4 @@ searchPhrase  = r"corpus\W*based"
 #searchPhrase  = r"corpus-?based"
 
 searchOCRresults(settings["path_to_memex"], searchPhrase)
-#exec(open("9_Interface_IndexPage.py").read())
+exec(open("9_Interface_IndexPage.py").read())

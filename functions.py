@@ -248,7 +248,7 @@ def memexStatusUpdates(pathToMemex, fileType):
 # extension --- useful when messing around and need to delete
 # lots of temporary files
 
-def removeFilesOfType(pathToMemex, fileExtension):
+def removeFilesOfType(pathToMemex, fileExtension, silent):
     if fileExtension in [".pdf", ".bib"]:
         sys.exit("files with extension %s must not be deleted in batch!!! Exiting..." % fileExtension)
     else:
@@ -257,7 +257,8 @@ def removeFilesOfType(pathToMemex, fileExtension):
                 # process publication tf data
                 if file.endswith(fileExtension):
                     pathToFile = os.path.join(subdir, file)
-                    print("Deleting: %s" % pathToFile)
+                    if silent != "silent":
+                        print("\tDeleting: %s" % pathToFile)
                     os.remove(pathToFile)
 
 ###########################################################
@@ -293,7 +294,7 @@ def prettifyBib(bibText):
 ###########################################################
 
 def loadMultiLingualStopWords(listOfLanguageCodes):
-    print("Loading stopwords...")
+    print(">> Loading stopwords...")
     stopwords = []
     pathToFiles = settings["stopwords"]
     codes = json.load(open(os.path.join(pathToFiles, "languages.json")))
