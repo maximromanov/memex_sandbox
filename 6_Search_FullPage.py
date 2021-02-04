@@ -47,11 +47,11 @@ def searchOCRresults(pathToMemex, searchString):
             newKey = "%09d::::%s" % (count, citationKey)
             results[newKey] = results.pop(citationKey)
 
-            # add time stamp
-            currentTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            results["timestamp"] = currentTime
-            # add search string (as submitted)
-            results["searchString"] = searchString
+        # add time stamp
+        currentTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        results["timestamp"] = currentTime
+        # add search string (as submitted)
+        results["searchString"] = searchString
 
     saveWith = re.sub("\W+", "", searchString)
     saveTo = os.path.join(pathToMemex, "searches", "%s.searchResults" % saveWith)
@@ -62,11 +62,15 @@ def searchOCRresults(pathToMemex, searchString):
 # RUN THE MAIN CODE #######################################
 ###########################################################
 
-searchPhrase  = r"corpus\W*based"
-#searchPhrase  = r"corpus\W*driven"
-#searchPhrase  = r"multi\W*verse"
-#searchPhrase  = r"text does ?n[o\W]t exist"
-#searchPhrase  = r"corpus-?based"
+searchPhrases = [
+    r"corpus\W*based",
+    r"corpus\W*driven",
+    r"multi\W*verse",
+    r"text does ?n[o\W]t exist",
+    r"corpus-?based"
+]
 
-searchOCRresults(settings["path_to_memex"], searchPhrase)
+for searchPhrase in searchPhrases:
+    searchOCRresults(settings["path_to_memex"], searchPhrase)
+
 exec(open("9_Interface_IndexPage.py").read())

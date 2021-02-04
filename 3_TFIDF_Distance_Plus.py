@@ -25,11 +25,11 @@ def filterTfidfDictionary(dictionary, threshold, lessOrMore):
         for item2, value in citeKeyDist.items():
             if lessOrMore == "less":
                 if value <= threshold:
-                    if item1.split("_")[0] != item2.split("_")[0]:
+                    if item1.split("__")[0] != item2.split("__")[0]:
                         dictionaryFilt[item1][item2] = value
             elif lessOrMore == "more":
                 if value >= threshold:
-                    if item1.split("_")[0] != item2.split("_")[0]:
+                    if item1.split("__")[0] != item2.split("__")[0]:
                         dictionaryFilt[item1][item2] = value
             else:
                 sys.exit("`lessOrMore` parameter must be `less` or `more`")
@@ -69,14 +69,14 @@ def tfidfPublications(pathToMemex, PageOrPubl):
             # page cluster as a document
             elif PageOrPubl == "pages":
                 pageNum = int(page)
-                citeKeyNew = "%s_%05d" % (citeKey, roundUp(pageNum, clusterSize))
+                citeKeyNew = "%s__%05d" % (citeKey, roundUp(pageNum, clusterSize))
                 if citeKeyNew not in corpusDic:
                     corpusDic[citeKeyNew] = []
                 corpusDic[citeKeyNew].append(text)
 
                 # add the last page of cluster N to cluster N+1
                 if pageNum % clusterSize == 0:
-                    citeKeyNew = "%s_%05d" % (citeKey, roundUp(pageNum+1, clusterSize))
+                    citeKeyNew = "%s__%05d" % (citeKey, roundUp(pageNum+1, clusterSize))
                     if citeKeyNew not in corpusDic:
                         corpusDic[citeKeyNew] = []
                     corpusDic[citeKeyNew].append(text)
